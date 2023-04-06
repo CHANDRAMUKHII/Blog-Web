@@ -2,27 +2,43 @@ import React, { useEffect, useState } from "react";
 import "./styles/BlogCard.css";
 import { useNavigate } from "react-router-dom";
 const NavBar = (props) => {
-const navigate = useNavigate();
+  const navigate = useNavigate();
   const [toggle, settoggle] = useState(true);
   const [search, setSearch] = useState("");
+  const [isLoggedIn, setLoggedIn] = useState(false);
   function filterChange(event) {
     event.preventDefault();
     setSearch(event.target.value);
     props.onChildData(event.target.value);
   }
   function showposts(event) {
-event.preventDefault();
-navigate("/");
+    event.preventDefault();
+    navigate("/");
+  }
+  function newPostHandler(event) {
+    event.preventDefault();
+    navigate("/newpost");
+  }
+  function loginHandler(event){
+    event.preventDefault();
+    setLoggedIn(false);
 }
   return (
     <div className="NavBar">
       <div className="leftside">
         <div className="links" id={toggle ? "hidden" : ""}>
-          <a href="#" >
-            Home
+          <a href="#">Home</a>
+          <a href="#" onClick={showposts}>
+            Posts
           </a>
-          <a href="#" onClick={showposts}>Posts</a>
-          <a href="#">New Post</a>
+          <a href="#" onClick={newPostHandler}>
+            New Post
+          </a>
+          {isLoggedIn ? (<a href="#" onClick={loginHandler}>
+            Logout
+          </a>):(<a href="#" onClick={loginHandler}>
+            Login
+          </a>)}
         </div>
         <button onClick={() => settoggle(!toggle)}>
           <svg

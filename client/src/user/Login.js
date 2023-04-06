@@ -1,11 +1,14 @@
 import React from "react";
 import "../styles/Login.css";
 import { Fragment, useRef } from "react";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import Nav from "../Nav";
 const Login = () => {
+  const navigate = useNavigate();
   const nameRef = useRef();
   const passwordRef = useRef();
+  let flag = true;
   async function submitHandler(event) {
     event.preventDefault();
     const name = nameRef.current.value;
@@ -13,8 +16,12 @@ const Login = () => {
 
     await axios
       .post("http://localhost:3000/login", { name, password })
-      .then((res) => localStorage.setItem("access_token", res.data.accessToken))
+      .then((res) => {
+        if (res.data === false) flag = false;
+        localStorage.setItem("access_token", res.data.accessToken);
+      })
       .catch((err) => console.log(err));
+    if (flag === true) navigate("/");
   }
 
   return (

@@ -1,36 +1,47 @@
 import React, { useState, useEffect } from "react";
 import "./styles/BlogCard.css";
 import { useNavigate } from "react-router-dom";
-import axios from 'axios';
+import axios from "axios";
 
 const Nav = () => {
   const navigate = useNavigate();
+  const [isLoggedIn, setLoggedIn] = useState(false);
   const [toggle, settoggle] = useState(true);
-
 
   function showposts(event) {
     event.preventDefault();
     navigate("/");
   }
 
-  
-
-function newpostHandler(event){
-event.preventDefault();
-navigate("/newpost")
-}
-
+  function newpostHandler(event) {
+    event.preventDefault();
+    navigate("/newpost");
+  }
+  function loginHandler(event) {
+    event.preventDefault();
+    setLoggedIn(true);
+    navigate("/login");
+  }
   return (
     <div className="NavBar">
       <div className="leftside">
         <div className="links" id={toggle ? "hidden" : ""}>
-          <a >Home</a>
+          <a>Home</a>
           <a href="#" onClick={showposts}>
             Posts
           </a>
           <a href="#" onClick={newpostHandler}>
             New Post
           </a>
+          {isLoggedIn ? (
+            <a href="#" onClick={loginHandler}>
+              Logout
+            </a>
+          ) : (
+            <a href="#" onClick={loginHandler}>
+              Login
+            </a>
+          )}
         </div>
         <button onClick={() => settoggle(!toggle)}>
           <svg
