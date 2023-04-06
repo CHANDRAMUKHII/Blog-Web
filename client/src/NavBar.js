@@ -6,6 +6,14 @@ const NavBar = (props) => {
   const [toggle, settoggle] = useState(true);
   const [search, setSearch] = useState("");
   const [isLoggedIn, setLoggedIn] = useState(false);
+
+  useEffect(() => {
+    const isLogged = localStorage.getItem("access_token");
+
+    if (isLogged === null) setLoggedIn(false);
+    else setLoggedIn(true);
+  }, []);
+
   function filterChange(event) {
     event.preventDefault();
     setSearch(event.target.value);
@@ -19,10 +27,16 @@ const NavBar = (props) => {
     event.preventDefault();
     navigate("/newpost");
   }
-  function loginHandler(event){
+  function loginHandler(event) {
     event.preventDefault();
-    setLoggedIn(false);
-}
+    navigate("/login");
+  }
+  function logoutHandler(event) {
+    event.preventDefault();
+    localStorage.removeItem("access_token");
+
+    window.location.reload();
+  }
   return (
     <div className="NavBar">
       <div className="leftside">
@@ -34,11 +48,15 @@ const NavBar = (props) => {
           <a href="#" onClick={newPostHandler}>
             New Post
           </a>
-          {isLoggedIn ? (<a href="#" onClick={loginHandler}>
-            Logout
-          </a>):(<a href="#" onClick={loginHandler}>
-            Login
-          </a>)}
+          {isLoggedIn ? (
+            <a href="#" onClick={logoutHandler}>
+              Logout
+            </a>
+          ) : (
+            <a href="#" onClick={loginHandler}>
+              Login
+            </a>
+          )}
         </div>
         <button onClick={() => settoggle(!toggle)}>
           <svg

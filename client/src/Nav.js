@@ -8,6 +8,13 @@ const Nav = () => {
   const [isLoggedIn, setLoggedIn] = useState(false);
   const [toggle, settoggle] = useState(true);
 
+  useEffect(() => {
+    const isLogged = localStorage.getItem("access_token");
+
+    if (isLogged === null) setLoggedIn(false);
+    else setLoggedIn(true);
+  }, []);
+
   function showposts(event) {
     event.preventDefault();
     navigate("/");
@@ -19,8 +26,13 @@ const Nav = () => {
   }
   function loginHandler(event) {
     event.preventDefault();
-    setLoggedIn(true);
     navigate("/login");
+  }
+  function logoutHandler(event) {
+    event.preventDefault();
+    localStorage.removeItem("access_token");
+
+    window.location.reload();
   }
   return (
     <div className="NavBar">
@@ -34,7 +46,7 @@ const Nav = () => {
             New Post
           </a>
           {isLoggedIn ? (
-            <a href="#" onClick={loginHandler}>
+            <a href="#" onClick={logoutHandler}>
               Logout
             </a>
           ) : (
